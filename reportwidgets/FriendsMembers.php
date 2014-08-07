@@ -14,7 +14,7 @@ class FriendsMembers extends ReportWidgetBase
         $partners = count(RazorsEdge::select('id')->groupBy('user_id')->get());
         $notPartners = $friends - $partners;
 
-        $this->vars['totalFriends'] = $friends;
+        $this->vars['totalFriends'] = number_format($friends);
         $this->vars['notPartners'] = $friends . ' / ' . round(($notPartners / $friends) * 100) . '%';
         $this->vars['partners'] = $partners . ' / ' . round(($partners / $friends) * 100) . '%';
         return $this->makePartial('widget');
