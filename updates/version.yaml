@@ -2,3 +2,6 @@
 1.0.2:
     - Initial schema install
     - create_razors_edges_table.php
+1.0.3:
+    - Add indexes for RE data
+    - add_indexes.php
