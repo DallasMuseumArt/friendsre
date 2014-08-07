@@ -3,6 +3,7 @@
 # ===================================
 
 fields:
-    id:
-        label: ID
-        disabled: true
+    limit:
+        label: Number of records
+        type: number
+        description: The number of records to be processed during each run

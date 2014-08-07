@@ -30,7 +30,7 @@ class SyncRazorsEdgeDataCommand extends Command
     /** 
      * @var Number of records to process per run
      */
-    protected $limit = 10000;
+    protected $limit = 1000; 
 
     /**
      * Create a new command instance.
@@ -38,6 +38,8 @@ class SyncRazorsEdgeDataCommand extends Command
      */
     public function __construct()
     {
+        $this->limit = Settings::get('limit', $this->limit);
+
         parent::__construct();
     }
 

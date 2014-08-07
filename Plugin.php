@@ -120,6 +120,21 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('friends.sync-razorsedge-data', 'DMA\FriendsRE\Console\SyncRazorsEdgeDataCommand');
     }  
 
+    public function registerSettings()
+    {
+        return [
+            'settings' => [
+                'label'       => 'Razors Edge Settings',
+                'description' => 'Manage razors edge based settings.',
+                'category'    => 'Friends',
+                'icon'        => 'icon-cog',
+                'class'       => 'DMA\FriendsRE\Models\Settings',
+                'order'       => 500,
+                'keywords'    => 'friends razorsedge'
+            ]
+        ];
+    }
+
     public function registerReportWidgets()
     {
         return [
