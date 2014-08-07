@@ -1,0 +1,4 @@
+1.0.1: First version of FriendsRE
+1.0.2:
+    - Initial schema install
+    - create_razors_edges_table.php

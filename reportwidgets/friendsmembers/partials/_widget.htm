@@ -1,0 +1,16 @@
+<div class="report-widget">
+    <h3>Friends/Partner Relations</h3>
+
+    <p><strong>Total Number of Friends: </strong> <?= $friends ?></p>
+
+    <div 
+        class="control-chart"
+        data-control="chart-pie" 
+        data-size="200"
+        data-center-text="<?= $friendsPercentage ?>%">
+        <ul>
+            <li>Not Partners <span><?= $notPartners ?></span></li>
+            <li>Partners<span><?= $partners ?></span></li>
+        </ul>
+    </div>
+</div>
