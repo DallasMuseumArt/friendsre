@@ -12,11 +12,11 @@ class FriendsMembers extends ReportWidgetBase
     {
         $friends = User::count();
         $partners = count(RazorsEdge::select('id')->groupBy('user_id')->get());
+        $notPartners = $friends - $partners;
 
-        $this->vars['friends'] = $friends;
-        $this->vars['partners'] = $partners;
-        $this->vars['notPartners'] = $friends - $partners;
-        $this->vars['friendsPercentage'] = round(($this->vars['partners'] / $friends) * 100);
+        $this->vars['totalFriends'] = $friends;
+        $this->vars['notPartners'] = $friends . ' / ' . round(($notPartners / $friends) * 100) . '%';
+        $this->vars['partners'] = $partners . ' / ' . round(($partners / $friends) * 100) . '%';
         return $this->makePartial('widget');
     }
 }
