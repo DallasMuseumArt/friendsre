@@ -15,8 +15,10 @@ class FriendsMembers extends ReportWidgetBase
         $notPartners = $friends - $partners;
 
         $this->vars['totalFriends'] = number_format($friends);
-        $this->vars['notPartners'] = $friends . ' / ' . round(($notPartners / $friends) * 100) . '%';
-        $this->vars['partners'] = $partners . ' / ' . round(($partners / $friends) * 100) . '%';
+        $this->vars['notPartners'] = number_format($notPartners);
+        $this->vars['partners'] = number_format($partners);
+        $this->vars['partnerPercent'] = round(($partners / $friends) * 100) . '%';
+
         return $this->makePartial('widget');
     }
 }
