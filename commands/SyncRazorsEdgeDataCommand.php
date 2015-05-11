@@ -1,12 +1,13 @@
 <?php
 
-namespace DMA\FriendsRE\Console;
+namespace DMA\FriendsRE\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Rainlab\User\Models\User;
+use DMA\Friends\Models\Usermeta;
 use DMA\FriendsRE\Models\RazorsEdge;
 use DMA\FriendsRE\Models\Settings;
 
@@ -75,10 +76,20 @@ class SyncRazorsEdgeDataCommand extends Command
                 $re->state          = $row->STATE;
                 $re->zip            = $row->POST_CODE;
 
+                var_dump([
+                    'RE-Member' => $row->MemberID,
+                    'Usermeta-Member'   => $user->metadata->current_member_number
+                ]);
+
+                $user->metadata->current_member_number = $row->MemberID;
+                $user->metadata->current_member = Usermeta::IS_MEMBER;
+
                 // Remove any existing records
                 Razorsedge::where('user_id', $user->id)->delete();
+                
                 // Save a new record
                 $user->razorsedge()->save($re);
+                $user->save();
 
                 $this->output->writeln('saved razors edge data for: ' . $row->EMAIL);
             }

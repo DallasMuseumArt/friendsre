@@ -25,6 +25,9 @@ class Plugin extends PluginBase
         ];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function boot()
     {   
         // Extend the user model to support our custom metadata
@@ -115,11 +118,25 @@ class Plugin extends PluginBase
         });
     }   
 
+    /**
+     * {@inheritDoc}
+     */
     public function register()
     {   
-        $this->registerConsoleCommand('friends.sync-razorsedge-data', 'DMA\FriendsRE\Console\SyncRazorsEdgeDataCommand');
+        $this->registerConsoleCommand('friends.sync-razorsedge-data', 'DMA\FriendsRE\Commands\SyncRazorsEdgeDataCommand');
     }  
 
+    /**
+     * {@inheritDoc}
+     */
+    public function registerSchedule($schedule)
+    {
+        $schedule->command('friends.sync-razorsedge-data')->daily();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function registerSettings()
     {
         return [
@@ -135,6 +152,9 @@ class Plugin extends PluginBase
         ];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function registerReportWidgets()
     {
         return [
