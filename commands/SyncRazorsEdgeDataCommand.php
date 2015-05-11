@@ -34,22 +34,13 @@ class SyncRazorsEdgeDataCommand extends Command
     protected $limit = 1000; 
 
     /**
-     * Create a new command instance.
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->limit = Settings::get('limit', $this->limit);
-
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      * @return void
      */
     public function fire()
     {
+        $this->limit = $this->option('limit');
+
         $this->db = DB::connection('razorsedge');
         $this->sync();
     }
@@ -76,12 +67,7 @@ class SyncRazorsEdgeDataCommand extends Command
                 $re->state          = $row->STATE;
                 $re->zip            = $row->POST_CODE;
 
-                var_dump([
-                    'RE-Member' => $row->MemberID,
-                    'Usermeta-Member'   => $user->metadata->current_member_number
-                ]);
-
-                $user->metadata->current_member_number = $row->MemberID;
+                $user->metadata->current_member_number = $row->CONSTITUENT_ID;
                 $user->metadata->current_member = Usermeta::IS_MEMBER;
 
                 // Remove any existing records
@@ -89,7 +75,7 @@ class SyncRazorsEdgeDataCommand extends Command
                 
                 // Save a new record
                 $user->razorsedge()->save($re);
-                $user->save();
+                $user->push();
 
                 $this->output->writeln('saved razors edge data for: ' . $row->EMAIL);
             }
@@ -162,6 +148,7 @@ class SyncRazorsEdgeDataCommand extends Command
     {
         return [
             ['reset', null, InputOption::VALUE_NONE, 'Starts a sync from the beginning', null],
+            ['limit', null, InputOption::VALUE_OPTIONAL, 'Number of records per type to import', $this->limit],
         ];
     }
 }
