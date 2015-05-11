@@ -39,7 +39,9 @@ class SyncRazorsEdgeDataCommand extends Command
      */
     public function fire()
     {
-        $this->limit = $this->option('limit');
+        if (!$this->limit = $this->option('limit')) {
+            $this->limit = Settings::get('limit', $this->limit);
+        }
 
         $this->db = DB::connection('razorsedge');
         $this->sync();
@@ -148,7 +150,7 @@ class SyncRazorsEdgeDataCommand extends Command
     {
         return [
             ['reset', null, InputOption::VALUE_NONE, 'Starts a sync from the beginning', null],
-            ['limit', null, InputOption::VALUE_OPTIONAL, 'Number of records per type to import', $this->limit],
+            ['limit', null, InputOption::VALUE_OPTIONAL, 'Number of records per type to import', null],
         ];
     }
 }
