@@ -49,7 +49,7 @@ class Plugin extends PluginBase
                     'tab'   => 'Razors Edge',
                 ],
                 'razorsedge[first_name]' => [
-                    'label' => 'First Name in Razors edge',
+                    'label' => 'First Name',
                     'tab'   => 'Razors Edge',
                 ],
                 'razorsedge[last_name]' => [
