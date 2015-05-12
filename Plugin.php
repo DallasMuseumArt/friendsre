@@ -152,17 +152,4 @@ class Plugin extends PluginBase
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function registerReportWidgets()
-    {
-        return [
-            'DMA\FriendsRE\ReportWidgets\FriendsMembers'=>[
-                'label'   => 'Chart - Friends/Partners Ratio',
-                'context' => 'dashboard'
-            ],
-        ];
-    }
-
 }
