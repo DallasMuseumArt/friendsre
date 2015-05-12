@@ -159,7 +159,7 @@ class Plugin extends PluginBase
     {
         return [
             'DMA\FriendsRE\ReportWidgets\FriendsMembers'=>[
-                'label'   => 'Friends/Partners Ratio',
+                'label'   => 'Chart - Friends/Partners Ratio',
                 'context' => 'dashboard'
             ],
         ];
