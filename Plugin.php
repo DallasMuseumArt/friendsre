@@ -35,49 +35,50 @@ class Plugin extends PluginBase
             $model->hasOne['razorsedge'] = ['DMA\FriendsRE\Models\RazorsEdge'];
         }); 
 
-        Event::listen('backend.form.extendFields', function($widget) {
-            if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) return;
-            if ($widget->getContext() != 'update') return;
+        // Temporarly disabled until we know how we want to handle this
+        // Event::listen('backend.form.extendFields', function($widget) {
+        //     if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) return;
+        //     if ($widget->getContext() != 'update') return;
 
-            $widget->addFields([
-                'razorsedge[razorsedge_id]' => [
-                    'label' => 'Constituent ID',
-                    'tab'   => 'Razors Edge',
-                ], 
-                'razorsedge[expires_on]' => [
-                    'label' => 'Expires On',
-                    'tab'   => 'Razors Edge',
-                ],
-                'razorsedge[first_name]' => [
-                    'label' => 'First Name',
-                    'tab'   => 'Razors Edge',
-                ],
-                'razorsedge[last_name]' => [
-                    'label' => 'Last Name',
-                    'tab'   => 'Razors Edge',
-                ],
-               'razorsedge[full_name]' => [
-                    'label' => 'Full Name',
-                    'tab'   => 'Razors Edge',
-                ],
-               'razorsedge[address]' => [
-                    'label' => 'Address',
-                    'tab'   => 'Razors Edge',
-                ],
-               'razorsedge[city]' => [
-                    'label' => 'City',
-                    'tab'   => 'Razors Edge',
-                ],
-               'razorsedge[state]' => [
-                    'label' => 'State',
-                    'tab'   => 'Razors Edge',
-                ],
-               'razorsedge[zip]' => [
-                    'label' => 'Zip',
-                    'tab'   => 'Razors Edge',
-                ],
-            ], 'primary');
-        });
+        //     $widget->addFields([
+        //         'razorsedge[razorsedge_id]' => [
+        //             'label' => 'Constituent ID',
+        //             'tab'   => 'Razors Edge',
+        //         ], 
+        //         'razorsedge[expires_on]' => [
+        //             'label' => 'Expires On',
+        //             'tab'   => 'Razors Edge',
+        //         ],
+        //         'razorsedge[first_name]' => [
+        //             'label' => 'First Name',
+        //             'tab'   => 'Razors Edge',
+        //         ],
+        //         'razorsedge[last_name]' => [
+        //             'label' => 'Last Name',
+        //             'tab'   => 'Razors Edge',
+        //         ],
+        //        'razorsedge[full_name]' => [
+        //             'label' => 'Full Name',
+        //             'tab'   => 'Razors Edge',
+        //         ],
+        //        'razorsedge[address]' => [
+        //             'label' => 'Address',
+        //             'tab'   => 'Razors Edge',
+        //         ],
+        //        'razorsedge[city]' => [
+        //             'label' => 'City',
+        //             'tab'   => 'Razors Edge',
+        //         ],
+        //        'razorsedge[state]' => [
+        //             'label' => 'State',
+        //             'tab'   => 'Razors Edge',
+        //         ],
+        //        'razorsedge[zip]' => [
+        //             'label' => 'Zip',
+        //             'tab'   => 'Razors Edge',
+        //         ],
+        //     ], 'primary');
+        // });
 
         Event::listen('backend.list.extendColumns', function($widget) {
             if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) return;
