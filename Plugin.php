@@ -124,7 +124,7 @@ class Plugin extends PluginBase
      */
     public function register()
     {   
-        $this->registerConsoleCommand('friends.sync-razorsedge-data', 'DMA\FriendsRE\Commands\SyncRazorsEdgeDataCommand');
+        $this->registerConsoleCommand('friends.sync-razorsedge', 'DMA\FriendsRE\Commands\SyncRazorsEdgeDataCommand');
     }  
 
     /**
@@ -132,7 +132,7 @@ class Plugin extends PluginBase
      */
     public function registerSchedule($schedule)
     {
-        $schedule->command('friends.sync-razorsedge-data')->daily();
+        $schedule->command('friends:sync-razorsedge')->everyFiveMinutes();
     }
 
     /**
