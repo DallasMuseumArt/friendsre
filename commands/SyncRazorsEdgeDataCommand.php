@@ -68,9 +68,15 @@ class SyncRazorsEdgeDataCommand extends Command
                 $re->city           = $row->CITY;
                 $re->state          = $row->STATE;
                 $re->zip            = $row->POST_CODE;
+                $re->member_level   = $row->Category;
 
                 $user->metadata->current_member_number = $row->CONSTITUENT_ID;
                 $user->metadata->current_member = Usermeta::IS_MEMBER;
+
+                // 3 is used for companies and organizations
+                if ($row->SEX != 3) {
+                    $user->metadata->gender = Usermeta::$genderOptions[$row->SEX + 1];
+                }
 
                 // Remove any existing records
                 Razorsedge::where('user_id', $user->id)->delete();
@@ -99,11 +105,12 @@ class SyncRazorsEdgeDataCommand extends Command
         $query = "
             SELECT
             TOP " . $this->limit . "
-                RECORDS.CONSTITUENT_ID, RECORDS.FIRST_NAME, RECORDS.LAST_NAME, RECORDS.FULL_NAME,
+                RECORDS.CONSTITUENT_ID, RECORDS.FIRST_NAME, RECORDS.LAST_NAME, RECORDS.FULL_NAME, RECORDS.SEX,
                 ADDRESS.ADDRESS_BLOCK, ADDRESS.CITY, ADDRESS.STATE, ADDRESS.POST_CODE, ADDRESS.DATE_LAST_CHANGED,
                 PHONES.NUM as EMAIL,
                 MAX(Member.ID) as MemberID,
-                MAX(MembershipTransaction.ExpiresOn) as ExpiresOn
+                MAX(MembershipTransaction.ExpiresOn) as ExpiresOn,
+                MAX(MembershipTransaction.Category) as Category
             FROM
                 RECORDS,
                 CONSTIT_ADDRESS,
@@ -123,7 +130,7 @@ class SyncRazorsEdgeDataCommand extends Command
  
             and TABLEENTRIES_phones.LONGDESCRIPTION  = 'E-mail'
             and RECORDS.ID > " . $id . "
-            group by RECORDS.ID, RECORDS.CONSTITUENT_ID, RECORDS.FIRST_NAME, RECORDS.LAST_NAME, RECORDS.FULL_NAME,                                                   
+            group by RECORDS.ID, RECORDS.CONSTITUENT_ID, RECORDS.FIRST_NAME, RECORDS.LAST_NAME, RECORDS.FULL_NAME, RECORDS.SEX,                                                   
                   ADDRESS.ADDRESS_BLOCK, ADDRESS.CITY, ADDRESS.STATE, ADDRESS.POST_CODE, ADDRESS.DATE_LAST_CHANGED,                       
                   PHONES.NUM
             order by RECORDS.ID

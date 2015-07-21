@@ -5,3 +5,6 @@
 1.0.3:
     - Add indexes for RE data
     - add_indexes.php
+1.0.4:
+    - Add member levels
+    - add_member_levels.php
