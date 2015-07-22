@@ -80,7 +80,7 @@ class SyncRazorsEdgeDataCommand extends Command
 
                 // 3 is used for companies and organizations
                 if ($row->SEX != 3) {
-                    $user->metadata->gender = Usermeta::$genderOptions[$row->SEX + 1];
+                    $user->metadata->gender = Usermeta::$genderOptions[$row->SEX - 1];
                 }
 
                 // Remove any existing records
