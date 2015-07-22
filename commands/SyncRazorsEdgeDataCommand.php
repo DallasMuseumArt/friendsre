@@ -71,7 +71,12 @@ class SyncRazorsEdgeDataCommand extends Command
                 $re->member_level   = $row->Category;
 
                 $user->metadata->current_member_number = $row->CONSTITUENT_ID;
-                $user->metadata->current_member = Usermeta::IS_MEMBER;
+
+                if (strtotime($row->ExpiresOn) >= time()) {
+                    $user->metadata->current_member = Usermeta::IS_MEMBER;
+                } else {
+                    $user->metadata->current_member = Usermeta::NON_MEMBER;
+                }
 
                 // 3 is used for companies and organizations
                 if ($row->SEX != 3) {
