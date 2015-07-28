@@ -12,7 +12,7 @@ class CreateRazorsEdgesTable extends Migration
         {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('user_id')->nullable();
             $table->string('razorsedge_id');
             $table->integer('member_id')->nullable();
             $table->timestamp('expires_on')->nullable();

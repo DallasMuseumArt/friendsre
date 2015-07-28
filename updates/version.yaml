@@ -8,3 +8,6 @@
 1.0.4:
     - Add member levels
     - add_member_levels.php
+1.0.5:
+    - Add email field 
+    - add_email_field.php
