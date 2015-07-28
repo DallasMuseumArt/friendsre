@@ -10,7 +10,7 @@ class AddEmailField extends Migration
     {   
         Schema::table('dma_friendsre_razors_edges', function($table)
         {   
-            $table->integer('email');
+            $table->string('email');
         }); 
     }   
 

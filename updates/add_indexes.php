@@ -13,5 +13,7 @@ class AddIndexesTable extends Migration
             $table->index('user_id');
         }); 
 
-    }    
+    } 
+
+    public function down() {}   
 }

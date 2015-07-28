@@ -55,20 +55,26 @@ class SyncRazorsEdgeDataCommand extends Command
         foreach($reData as $row) {
             if (empty($row->EMAIL)) continue;
 
+            $re                 = new RazorsEdge;
+            $re->razorsedge_id  = $row->CONSTITUENT_ID;
+            $re->member_id      = $row->MemberID;
+            $re->expires_on     = date('Y-m-d H:i:s', strtotime($row->ExpiresOn));
+            $re->email          = $row->EMAIL;
+            $re->first_name     = $row->FIRST_NAME;
+            $re->last_name      = $row->LAST_NAME;
+            $re->address        = $row->ADDRESS_BLOCK;
+            $re->city           = $row->CITY;
+            $re->state          = $row->STATE;
+            $re->zip            = $row->POST_CODE;
+            $re->member_level   = $row->Category;
+
+            // Remove any existing records
+            Razorsedge::where('email', $row->EMAIL)->delete();
+
+            // Find an associative account
             $user = User::where('email', $row->EMAIL)->first();
 
             if ($user) {
-                $re                 = new RazorsEdge;
-                $re->razorsedge_id  = $row->CONSTITUENT_ID;
-                $re->member_id      = $row->MemberID;
-                $re->expires_on     = date('Y-m-d H:i:s', strtotime($row->ExpiresOn));
-                $re->first_name     = $row->FIRST_NAME;
-                $re->last_name      = $row->LAST_NAME;
-                $re->address        = $row->ADDRESS_BLOCK;
-                $re->city           = $row->CITY;
-                $re->state          = $row->STATE;
-                $re->zip            = $row->POST_CODE;
-                $re->member_level   = $row->Category;
 
                 $user->metadata->current_member_number = $row->CONSTITUENT_ID;
 
@@ -78,20 +84,21 @@ class SyncRazorsEdgeDataCommand extends Command
                     $user->metadata->current_member = Usermeta::NON_MEMBER;
                 }
 
-                // 3 is used for companies and organizations
-                if ($row->SEX != 3) {
-                    $user->metadata->gender = Usermeta::$genderOptions[$row->SEX - 1];
+                // 2 is used for companies and organizations
+                if ($row->SEX != 2) {
+                    $user->metadata->gender = Usermeta::$genderOptions[$row->SEX];
                 }
-
-                // Remove any existing records
-                Razorsedge::where('user_id', $user->id)->delete();
                 
                 // Save a new record
                 $user->razorsedge()->save($re);
                 $user->push();
 
-                $this->output->writeln('saved razors edge data for: ' . $row->EMAIL);
+            } else {
+                // If a user doesnt exist we will just keep a stub record for now
+                $re->save();
             }
+
+            $this->output->writeln('saved razors edge data for: ' . $row->EMAIL);
         }
 
         $this->output->writeln('sync complete');
@@ -103,14 +110,14 @@ class SyncRazorsEdgeDataCommand extends Command
         $range = Settings::get('sync_range', 0);
 
         $this->output->writeln('begin query with range ' . $range);
-        $re = new RazorsEdge;
         $id = $range;
         $range += $this->limit;
 
         $query = "
             SELECT
             TOP " . $this->limit . "
-                RECORDS.CONSTITUENT_ID, RECORDS.FIRST_NAME, RECORDS.LAST_NAME, RECORDS.FULL_NAME, RECORDS.SEX,
+                RECORDS.CONSTITUENT_ID, RECORDS.FIRST_NAME, RECORDS.LAST_NAME, RECORDS.FULL_NAME, 
+                RECORDS.SEX - 1 as SEX,
                 ADDRESS.ADDRESS_BLOCK, ADDRESS.CITY, ADDRESS.STATE, ADDRESS.POST_CODE, ADDRESS.DATE_LAST_CHANGED,
                 PHONES.NUM as EMAIL,
                 MAX(Member.ID) as MemberID,
@@ -132,12 +139,11 @@ class SyncRazorsEdgeDataCommand extends Command
                 PHONES.PHONETYPEID = TABLEENTRIES_phones.TABLEENTRIESID AND
                 Member.ConstitID = RECORDS.ID AND
                 MembershipTransaction.MembershipID = Member.ID 
- 
             and TABLEENTRIES_phones.LONGDESCRIPTION  = 'E-mail'
             and RECORDS.ID > " . $id . "
-            group by RECORDS.ID, RECORDS.CONSTITUENT_ID, RECORDS.FIRST_NAME, RECORDS.LAST_NAME, RECORDS.FULL_NAME, RECORDS.SEX,                                                   
-                  ADDRESS.ADDRESS_BLOCK, ADDRESS.CITY, ADDRESS.STATE, ADDRESS.POST_CODE, ADDRESS.DATE_LAST_CHANGED,                       
-                  PHONES.NUM
+            group by RECORDS.ID, RECORDS.CONSTITUENT_ID, RECORDS.FIRST_NAME, RECORDS.LAST_NAME, RECORDS.FULL_NAME, 
+                RECORDS.SEX, ADDRESS.ADDRESS_BLOCK, ADDRESS.CITY, ADDRESS.STATE, ADDRESS.POST_CODE, 
+                ADDRESS.DATE_LAST_CHANGED, PHONES.NUM
             order by RECORDS.ID
         ";
 
