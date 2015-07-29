@@ -3,6 +3,7 @@
 use System\Classes\PluginBase;
 use Illuminate\Support\Facades\Event;
 use Rainlab\User\Models\User as User;
+use DMA\FriendsRE\Classes\FriendsREEventHandler;
 
 /**
  * FriendsRE Plugin Information File
@@ -30,6 +31,11 @@ class Plugin extends PluginBase
      */
     public function boot()
     {   
+
+        // Register Event Subscribers
+        $subscriber = new FriendsREEventHandler;
+        Event::subscribe($subscriber);
+
         // Extend the user model to support our custom metadata
         User::extend(function($model) {
             $model->hasOne['razorsedge'] = ['DMA\FriendsRE\Models\RazorsEdge'];
@@ -118,6 +124,16 @@ class Plugin extends PluginBase
             ]);
         });
     }   
+
+    /**
+     * {@inheritDoc}
+     */
+    public function registerComponents()
+    {
+        return [
+            'DMA\FriendsRE\Components\VerifyMembership' => 'VerifyMembership',
+        ];
+    }
 
     /**
      * {@inheritDoc}
