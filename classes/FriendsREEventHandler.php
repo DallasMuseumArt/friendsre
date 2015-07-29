@@ -1,5 +1,6 @@
 <?php namespace DMA\FriendsRE\Classes;
 
+use Session;
 use DB;
 use DMA\FriendsRE\Models\Razorsedge;
 
@@ -27,9 +28,10 @@ class FriendsREEventHandler {
 
         $re = Razorsedge::where('razorsedge_id', $data['login'])->first();
 
+\Debugbar::info($re);
         if ($re && !$re->user_id) {
-            session(['authRedirect' => 'verify-membership']);
-            session(['re' => $re]);
+            Session::put(['authRedirect' => 'verify-membership']);
+            Session::put(['re' => $re]);
             return true;
         }
 

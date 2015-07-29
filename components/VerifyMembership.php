@@ -8,6 +8,7 @@ use Str;
 use Flash;
 use Redirect;
 use Auth;
+use Session;
 
 class VerifyMembership extends ComponentBase
 {
@@ -30,7 +31,7 @@ class VerifyMembership extends ComponentBase
      */
     public function onRun()
     {
-        $re = session('re');
+        $re = Session::get('re');
 
         if (!$re) {
             return Redirect::intended('/');
@@ -45,13 +46,14 @@ class VerifyMembership extends ComponentBase
     {
         $first_name = post('first_name');
         $last_name = post('last_name');
-        $re = session('re');
+        $re = Session::pull('re');
 
         if (Str::lower($re->first_name) == Str::lower($first_name)
             && Str::lower($re->last_name) == Str::lower($last_name)) {
 
-            $this->page['re'] = $re;
-            $this->page['options'] = Usermeta::getOptions();
+            Session::put('re', $re); // resave the session if we are going to continue
+            $this->page['re']       = $re;
+            $this->page['options']  = Usermeta::getOptions();
 
             return [
                 '#layout-content' => $this->renderPartial('@register'),
@@ -76,7 +78,7 @@ class VerifyMembership extends ComponentBase
         $user->metadata->last_name = $vars['metadata']['last_name'];
         $user->is_activated = 1;
         
-        $re = session('re');
+        $re = Session::pull('re');
 
         if ($user->push() && $user->razorsedge()->save($re)) {
             Auth::login($user);
