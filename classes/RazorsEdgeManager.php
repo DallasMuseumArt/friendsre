@@ -12,6 +12,19 @@ use DMA\Friends\Models\Usermeta;
  */
 class RazorsEdgeManager {
     
+    /**
+     * Save a razors edge record to a user and handle the parsing of
+     * metadata that goes along with it
+     * 
+     * @param User $user
+     * The user object to save
+     *
+     * @param RazorsEdge $re
+     * The razors edge stub record to connect with the user
+     *
+     * @return boolean
+     * Returns true if the relationship was saved
+     */
     public static function saveMembership(User $user, RazorsEdge $re)
     {
 
