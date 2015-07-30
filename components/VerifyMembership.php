@@ -84,7 +84,7 @@ class VerifyMembership extends ComponentBase
 
         if (RazorsEdgeManager::saveMembership($user, $re)) {
             Auth::login($user);
-            return Redirect::intended('friends');
+            return Redirect::intended('/');
         } else {
 
             Flash::error(Lang::get('dma.friends::lang.user.saveFailed'));
