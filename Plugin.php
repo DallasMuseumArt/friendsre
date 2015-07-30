@@ -169,4 +169,14 @@ class Plugin extends PluginBase
         ];
     }
 
+    /**
+     * Register additional friends activity types
+     */
+    public function registerFriendsActivities()
+    {
+        return [
+            'DMA\FriendsRE\Activities\SavedMembership'   => 'SavedMembership',
+        ];
+    }
+
 }

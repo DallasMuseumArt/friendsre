@@ -3,6 +3,7 @@
 use DMA\FriendsRE\Models\RazorsEdge;
 use RainLab\User\Models\User;
 use DMA\Friends\Models\Usermeta;
+use Event;
 
 /**
  * Helper class for razors edge functionality
@@ -40,6 +41,8 @@ class RazorsEdgeManager {
 
             $user->push();
             $user->razorsedge()->save($re);
+
+            Event::fire('dma.friendsre.membershipSaved', [ $user ]);
 
             return true;
         }

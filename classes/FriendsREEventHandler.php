@@ -4,6 +4,7 @@ use Session;
 use DB;
 use DMA\FriendsRE\Models\Razorsedge;
 use DMA\FriendsRE\Classes\RazorsEdgeManager;
+use DMA\FriendsRE\Activities\SavedMembership;
 
 /**
  * Manage custom events in the friends platform
@@ -17,6 +18,7 @@ class FriendsREEventHandler {
     {   
         $events->listen('auth.invalidLogin', 'DMA\FriendsRE\Classes\FriendsREEventHandler@onAuthInvalidLogin');
         $events->listen('auth.register', 'DMA\FriendsRE\Classes\FriendsREEventHandler@onAuthRegister');
+        $events->listen('dma.friendsre.membershipSaved', 'DMA\FriendsRE\Classes\FriendsREEventHandler@onMembershipSaved');
     }
 
     /**
@@ -47,5 +49,10 @@ class FriendsREEventHandler {
         //check if a razors edge record exists and merge if it isnt connected
         $re = Razorsedge::where('email', $user->email)->first();
         RazorsEdgeManager::saveMembership($user, $re);
+    }
+
+    public function onMembershipSaved($user)
+    {
+        SavedMembership::process($user);
     }
 }
