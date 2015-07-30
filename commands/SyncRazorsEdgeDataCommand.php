@@ -10,6 +10,7 @@ use Rainlab\User\Models\User;
 use DMA\Friends\Models\Usermeta;
 use DMA\FriendsRE\Models\RazorsEdge;
 use DMA\FriendsRE\Models\Settings;
+use DMA\FriendsRE\Classes\RazorsEdgeManager;
 
 class SyncRazorsEdgeDataCommand extends Command
 {
@@ -76,22 +77,12 @@ class SyncRazorsEdgeDataCommand extends Command
 
             if ($user) {
 
-                $user->metadata->current_member_number = $row->CONSTITUENT_ID;
-
-                if (strtotime($row->ExpiresOn) >= time()) {
-                    $user->metadata->current_member = Usermeta::IS_MEMBER;
-                } else {
-                    $user->metadata->current_member = Usermeta::NON_MEMBER;
-                }
-
                 // 2 is used for companies and organizations
                 if ($row->SEX != 2) {
                     $user->metadata->gender = Usermeta::$genderOptions[$row->SEX];
                 }
                 
-                // Save a new record
-                $user->razorsedge()->save($re);
-                $user->push();
+                RazorsEdgeManager::saveMembership($user, $re);
 
             } else {
                 // If a user doesnt exist we will just keep a stub record for now

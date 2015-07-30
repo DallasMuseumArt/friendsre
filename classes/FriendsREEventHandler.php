@@ -3,6 +3,7 @@
 use Session;
 use DB;
 use DMA\FriendsRE\Models\Razorsedge;
+use DMA\FriendsRE\Classes\RazorsEdgeManager;
 
 /**
  * Manage custom events in the friends platform
@@ -28,7 +29,6 @@ class FriendsREEventHandler {
 
         $re = Razorsedge::where('razorsedge_id', $data['login'])->first();
 
-\Debugbar::info($re);
         if ($re && !$re->user_id) {
             Session::put(['authRedirect' => 'verify-membership']);
             Session::put(['re' => $re]);
@@ -45,5 +45,7 @@ class FriendsREEventHandler {
     public function onAuthRegister($user)
     {  
         //check if a razors edge record exists and merge if it isnt connected
+        $re = Razorsedge::where('email', $user->email)->first();
+        RazorsEdgeManager::saveMembership($user, $re);
     }
 }

@@ -3,9 +3,11 @@
 use RainLab\User\Models\User;
 use DMA\Friends\Models\Usermeta;
 use DMA\Friends\Classes\UserExtend;
+use DMA\FriendsRE\Classes\RazorsEdgeManager;
 use Cms\Classes\ComponentBase;
 use Str;
 use Flash;
+use Lang;
 use Redirect;
 use Auth;
 use Session;
@@ -80,15 +82,16 @@ class VerifyMembership extends ComponentBase
         
         $re = Session::pull('re');
 
-        if ($user->push() && $user->razorsedge()->save($re)) {
+        if (RazorsEdgeManager::saveMembership($user, $re)) {
             Auth::login($user);
             return Redirect::intended('friends');
+        } else {
+
+            Flash::error(Lang::get('dma.friends::lang.user.saveFailed'));
+
+            return [
+                '#flashMessages' => $this->renderPartial('@flashMessages'),
+            ];
         }
-
-        Flash::error(Lang::get('dma.friends::lang.user.saveFailed'));
-
-        return [
-            '#flashMessages' => $this->renderPartial('@flashMessages'),
-        ];
     }
 }
