@@ -86,43 +86,43 @@ class Plugin extends PluginBase
         //     ], 'primary');
         // });
 
-        Event::listen('backend.list.extendColumns', function($widget) {
-            if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) return;
+        // Event::listen('backend.list.extendColumns', function($widget) {
+        //     if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) return;
 
-            $widget->addColumns([
-                'razorsedge_id' => [
-                    'label' => 'Constituent ID',
-                    'relation' => 'razorsedge',
-                    'select' => '@razorsedge_id',
-                ],  
-                'address' => [
-                    'label' => 'RE - Address',
-                    'relation' => 'razorsedge',
-                    'select' => '@address',
-                ], 
-                'state' => [
-                    'label' => 'RE - State',
-                    'relation' => 'razorsedge',
-                    'select' => '@state',
-                ], 
-                'city' => [
-                    'label' => 'RE - City',
-                    'relation' => 'razorsedge',
-                    'select' => '@city',
-                ], 
-                'zip' => [
-                    'label' => 'RE - Zip',
-                    'relation' => 'razorsedge',
-                    'select' => '@zip',
-                ], 
-                'expires_on' => [
-                    'label' => 'RE - Membership Expires',
-                    'relation' => 'razorsedge',
-                    'select' => '@expires_on',
-                ], 
+        //     $widget->addColumns([
+        //         'razorsedge_id' => [
+        //             'label' => 'Constituent ID',
+        //             'relation' => 'razorsedge',
+        //             'select' => '@razorsedge_id',
+        //         ],  
+        //         'address' => [
+        //             'label' => 'RE - Address',
+        //             'relation' => 'razorsedge',
+        //             'select' => '@address',
+        //         ], 
+        //         'state' => [
+        //             'label' => 'RE - State',
+        //             'relation' => 'razorsedge',
+        //             'select' => '@state',
+        //         ], 
+        //         'city' => [
+        //             'label' => 'RE - City',
+        //             'relation' => 'razorsedge',
+        //             'select' => '@city',
+        //         ], 
+        //         'zip' => [
+        //             'label' => 'RE - Zip',
+        //             'relation' => 'razorsedge',
+        //             'select' => '@zip',
+        //         ], 
+        //         'expires_on' => [
+        //             'label' => 'RE - Membership Expires',
+        //             'relation' => 'razorsedge',
+        //             'select' => '@expires_on',
+        //         ], 
                 
-            ]);
-        });
+        //     ]);
+        // });
     }   
 
     /**
