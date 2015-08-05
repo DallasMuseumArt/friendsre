@@ -1,15 +1,14 @@
 <div class="container">
     <div class="verify-membership col-sm-6 col-md-6 col-lg-6 col-sm-offset-3 col-md-offset-3 col-lg-offset-3"> 
-        <h1>Verify Your Name</h1> 
-
-        <div>
-            <label>Member ID:</label>
-            {{ member_id }}
-        </div>
+        <h1>Verify Your Membership</h1> 
 
         <div id="flashMessages"></div>
         
         {{ form_ajax('onSubmit') }}
+            <div>
+                {{ member_id|raw }}
+            </div>
+
             <input id="first-name" type="text" name="first_name" placeholder="First Name">
             <input id="last-name" type="text" name="last_name" placeholder="Last Name">
             <button class="secondary btn btn-info" type="submit">Verify</button>

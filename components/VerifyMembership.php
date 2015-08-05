@@ -3,6 +3,7 @@
 use RainLab\User\Models\User;
 use DMA\Friends\Models\Usermeta;
 use DMA\Friends\Classes\UserExtend;
+use DMA\FriendsRE\Models\RazorsEdge;
 use DMA\FriendsRE\Classes\RazorsEdgeManager;
 use Cms\Classes\ComponentBase;
 use Str;
@@ -35,11 +36,15 @@ class VerifyMembership extends ComponentBase
     {
         $re = Session::get('re');
 
-        if (!$re) {
-            return Redirect::intended('/');
-        }
+        // if (!$re) {
+        //     return Redirect::intended('/');
+        // }
 
-        $this->page['member_id'] = $re->razorsedge_id;
+        if (!$re) {
+            $this->page['member_id'] = '<input id="member-id" type="text" name="member_id" placeholder="Member ID">';
+        } else {
+            $this->page['member_id'] = $re->razorsedge_id;
+        }
 
         $this->addCss('components/verifymembership/assets/verify-membership.css');
     }
@@ -50,8 +55,13 @@ class VerifyMembership extends ComponentBase
         $last_name = post('last_name');
         $re = Session::pull('re');
 
+        if (!$re && $member_id = post('member_id')) {
+            $re = RazorsEdge::where('razorsedge_id', $member_id)->first();
+        }
+
         if (Str::lower($re->first_name) == Str::lower($first_name)
-            && Str::lower($re->last_name) == Str::lower($last_name)) {
+            && Str::lower($re->last_name) == Str::lower($last_name)
+            && $re) {
 
             Session::put('re', $re); // resave the session if we are going to continue
             $this->page['re']       = $re;
@@ -62,7 +72,7 @@ class VerifyMembership extends ComponentBase
             ];
 
         } else {
-            Flash::error('The first and last name did not match our records');
+            Flash::error('The information did not match our records');
         }
 
         return [
