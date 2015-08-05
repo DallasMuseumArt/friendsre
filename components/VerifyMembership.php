@@ -41,7 +41,7 @@ class VerifyMembership extends ComponentBase
         // }
 
         if (!$re) {
-            $this->page['member_id'] = '<input id="member-id" type="text" name="member_id" placeholder="Member ID">';
+            $this->page['member_id'] = false;
         } else {
             $this->page['member_id'] = $re->razorsedge_id;
         }

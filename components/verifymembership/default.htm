@@ -5,9 +5,15 @@
         <div id="flashMessages"></div>
         
         {{ form_ajax('onSubmit') }}
+            {% if member_id %}
             <div>
-                {{ member_id|raw }}
+                <label>Member ID:</label>
+                {{ member_id }}
             </div>
+            
+            {% else %}
+            <input id="member-id" type="text" name="member_id" placeholder="Member ID">
+            {% endif %}
 
             <input id="first-name" type="text" name="first_name" placeholder="First Name">
             <input id="last-name" type="text" name="last_name" placeholder="Last Name">
