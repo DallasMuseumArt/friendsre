@@ -2,7 +2,7 @@
 
 use Session;
 use DB;
-use DMA\FriendsRE\Models\Razorsedge;
+use DMA\FriendsRE\Models\RazorsEdge;
 use DMA\FriendsRE\Classes\RazorsEdgeManager;
 use DMA\FriendsRE\Activities\SavedMembership;
 

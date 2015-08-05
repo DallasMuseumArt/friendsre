@@ -26,8 +26,9 @@ class RazorsEdgeManager {
      * @return boolean
      * Returns true if the relationship was saved
      */
-    public static function saveMembership(User $user, RazorsEdge $re)
+    public static function saveMembership(User $user, $re)
     {
+        if (!$re) return;
 
         if (isset($re->user_id) && $re->user_id === 0) {
            
