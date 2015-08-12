@@ -86,16 +86,7 @@ class VerifyMembership extends ComponentBase
     {
         $vars = post();
 
-        $rules = [
-            'first_name'            => 'required|min:2',
-            'last_name'             => 'required|min:2',
-            //'username'              => 'required|min:6',
-            'email'                 => 'required|email|between:2,64',
-            'password'              => 'required|min:6',
-            'password_confirmation' => 'required|min:6',
-        ];
-
-        $user = AuthManager::register($vars, $rules);
+        $user = AuthManager::register($vars);
         
         $re = Session::pull('re');
 
