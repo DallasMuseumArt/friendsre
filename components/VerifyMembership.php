@@ -36,10 +36,9 @@ class VerifyMembership extends ComponentBase
     public function onRun()
     {
         $re = Session::get('re');
+        $isIOS = get('isIOS');
 
-        // if (!$re) {
-        //     return Redirect::intended('/');
-        // }
+        Session::put('isIOS', $isIOS);
 
         if (!$re) {
             $this->page['member_id'] = false;
@@ -53,8 +52,8 @@ class VerifyMembership extends ComponentBase
     public function onSubmit()
     {
         $first_name = post('first_name');
-        $last_name = post('last_name');
-        $re = Session::pull('re');
+        $last_name  = post('last_name');
+        $re         = Session::pull('re');
 
         if (!$re && $member_id = post('member_id')) {
             $re = RazorsEdge::where('razorsedge_id', $member_id)->first();
@@ -84,15 +83,25 @@ class VerifyMembership extends ComponentBase
 
     public function onRegister()
     {
-        $vars = post();
-
-        $user = AuthManager::register($vars);
-        
-        $re = Session::pull('re');
+        $vars   = post();
+        $user   = AuthManager::register($vars);
+        $re     = Session::pull('re');
+        $isIOS  = Session::pull('isIOS');
 
         if (RazorsEdgeManager::saveMembership($user, $re)) {
             Auth::login($user);
+
+            if ($isIOS) {
+                return [
+                    '#layout-content' => $this->renderPartial('@iosComplete', [
+                        'email'     => $user->email,
+                        'password'  => $vars['password'],
+                    ])
+                ];
+            }
+      
             return Redirect::intended('/');
+
         } else {
 
             Flash::error(Lang::get('dma.friends::lang.user.saveFailed'));

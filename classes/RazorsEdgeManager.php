@@ -31,7 +31,7 @@ class RazorsEdgeManager {
         if (!$re) return;
 
         if (isset($re->user_id) && $re->user_id === 0) {
-           
+            
             $user->metadata->current_member_number = $re->razorsedge_id;
             
             if (strtotime($re->expires_on) >= time()) {
