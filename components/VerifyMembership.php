@@ -3,6 +3,7 @@
 use RainLab\User\Models\User;
 use DMA\Friends\Models\Usermeta;
 use DMA\Friends\Classes\UserExtend;
+use DMA\Friends\Classes\AuthManager;
 use DMA\FriendsRE\Models\RazorsEdge;
 use DMA\FriendsRE\Classes\RazorsEdgeManager;
 use Cms\Classes\ComponentBase;
@@ -59,9 +60,9 @@ class VerifyMembership extends ComponentBase
             $re = RazorsEdge::where('razorsedge_id', $member_id)->first();
         }
 
-        if (Str::lower($re->first_name) == Str::lower($first_name)
-            && Str::lower($re->last_name) == Str::lower($last_name)
-            && $re) {
+        if ($re 
+            && Str::lower($re->first_name) == Str::lower($first_name)
+            && Str::lower($re->last_name) == Str::lower($last_name)) {
 
             Session::put('re', $re); // resave the session if we are going to continue
             $this->page['re']       = $re;
@@ -84,11 +85,17 @@ class VerifyMembership extends ComponentBase
     public function onRegister()
     {
         $vars = post();
-        $user = new User($vars);
-        $user->metadata = new Usermeta;
-        $user->metadata->first_name = $vars['metadata']['first_name'];
-        $user->metadata->last_name = $vars['metadata']['last_name'];
-        $user->is_activated = 1;
+
+        $rules = [
+            'first_name'            => 'required|min:2',
+            'last_name'             => 'required|min:2',
+            //'username'              => 'required|min:6',
+            'email'                 => 'required|email|between:2,64',
+            'password'              => 'required|min:6',
+            'password_confirmation' => 'required|min:6',
+        ];
+
+        $user = AuthManager::register($vars, $rules);
         
         $re = Session::pull('re');
 

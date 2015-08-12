@@ -10,3 +10,7 @@ form input, form button, form select {
     padding: 0 20px;
     font-size: 1.5em !important;
 }
+
+.birthdate select, .birthdate input {
+    margin: 0 20px 10px 0;
+}

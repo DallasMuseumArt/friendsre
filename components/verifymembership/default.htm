@@ -12,12 +12,14 @@
             </div>
             
             {% else %}
-            <input id="member-id" type="text" name="member_id" placeholder="Member ID">
+            <input id="member-id" type="text" name="member_id" placeholder="Member ID"/>
             {% endif %}
 
-            <input id="first-name" type="text" name="first_name" placeholder="First Name">
-            <input id="last-name" type="text" name="last_name" placeholder="Last Name">
-            <button class="secondary btn btn-info" type="submit">Verify</button>
+            <div>
+                <input id="first-name" type="text" name="first_name" placeholder="First Name"/>
+                <input id="last-name" type="text" name="last_name" placeholder="Last Name"/>
+                <button class="secondary btn btn-info" type="submit">Verify</button>
+            </div>
         {{ form_close() }}
     </div>
 </div>
