@@ -14,3 +14,7 @@ form input, form button, form select {
 .birthdate select, .birthdate input {
     margin: 0 20px 10px 0;
 }
+
+.registration-complete {
+    text-align: center;
+}

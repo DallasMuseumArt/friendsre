@@ -36,9 +36,6 @@ class VerifyMembership extends ComponentBase
     public function onRun()
     {
         $re = Session::get('re');
-        $isIOS = get('isIOS');
-
-        Session::put('isIOS', $isIOS);
 
         if (!$re) {
             $this->page['member_id'] = false;
@@ -63,7 +60,6 @@ class VerifyMembership extends ComponentBase
             && Str::lower($re->first_name) == Str::lower($first_name)
             && Str::lower($re->last_name) == Str::lower($last_name)) {
 
-            Session::put('re', $re); // resave the session if we are going to continue
             $this->page['re']       = $re;
             $this->page['options']  = Usermeta::getOptions();
 
@@ -72,6 +68,7 @@ class VerifyMembership extends ComponentBase
             ];
 
         } else {
+            Session::put('re', $re);
             Flash::error('The information did not match our records');
         }
 
@@ -85,30 +82,19 @@ class VerifyMembership extends ComponentBase
     {
         $vars   = post();
         $user   = AuthManager::register($vars);
-        $re     = Session::pull('re');
-        $isIOS  = Session::pull('isIOS');
+        $isIOS  = get('isIOS');
 
-        if (RazorsEdgeManager::saveMembership($user, $re)) {
-            Auth::login($user);
+        Auth::login($user);
 
-            if ($isIOS) {
-                return [
-                    '#layout-content' => $this->renderPartial('@iosComplete', [
-                        'email'     => $user->email,
-                        'password'  => $vars['password'],
-                    ])
-                ];
-            }
-      
-            return Redirect::intended('/');
-
-        } else {
-
-            Flash::error(Lang::get('dma.friends::lang.user.saveFailed'));
-
+        if ($isIOS) {
             return [
-                '#flashMessages' => $this->renderPartial('@flashMessages'),
+                '#layout-content' => $this->renderPartial('@iosComplete', [
+                    'email'     => $user->email,
+                    'password'  => $vars['password'],
+                ])
             ];
         }
+  
+        return Redirect::intended('/');
     }
 }
