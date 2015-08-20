@@ -60,6 +60,15 @@ class VerifyMembership extends ComponentBase
             && Str::lower($re->first_name) == Str::lower($first_name)
             && Str::lower($re->last_name) == Str::lower($last_name)) {
 
+            if ($re->user) {
+                return Redirect::intended('/');
+            }
+
+            if ($user = User::where('email', $re->email)->first()) {
+                RazorsEdgeManager::saveMembership($user, $re);
+                return $this->complete($user);
+            }
+
             $this->page['re']       = $re;
             $this->page['options']  = Usermeta::getOptions();
 
@@ -82,6 +91,12 @@ class VerifyMembership extends ComponentBase
     {
         $vars   = post();
         $user   = AuthManager::register($vars);
+
+        return $this->complete($user);
+    }
+
+    public function complete($user)
+    {
         $isIOS  = get('isIOS');
 
         Auth::login($user);
