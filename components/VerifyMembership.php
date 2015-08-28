@@ -3,6 +3,8 @@
 use RainLab\User\Models\User;
 use DMA\Friends\Models\Usermeta;
 use DMA\Friends\Classes\UserExtend;
+use DMA\Friends\Classes\AuthManager;
+use DMA\FriendsRE\Models\RazorsEdge;
 use DMA\FriendsRE\Classes\RazorsEdgeManager;
 use Cms\Classes\ComponentBase;
 use Str;
@@ -36,10 +38,10 @@ class VerifyMembership extends ComponentBase
         $re = Session::get('re');
 
         if (!$re) {
-            return Redirect::intended('/');
+            $this->page['member_id'] = false;
+        } else {
+            $this->page['member_id'] = $re->razorsedge_id;
         }
-
-        $this->page['member_id'] = $re->razorsedge_id;
 
         $this->addCss('components/verifymembership/assets/verify-membership.css');
     }
@@ -47,13 +49,26 @@ class VerifyMembership extends ComponentBase
     public function onSubmit()
     {
         $first_name = post('first_name');
-        $last_name = post('last_name');
-        $re = Session::pull('re');
+        $last_name  = post('last_name');
+        $re         = Session::pull('re');
 
-        if (Str::lower($re->first_name) == Str::lower($first_name)
+        if (!$re && $member_id = post('member_id')) {
+            $re = RazorsEdge::where('razorsedge_id', $member_id)->first();
+        }
+
+        if ($re 
+            && Str::lower($re->first_name) == Str::lower($first_name)
             && Str::lower($re->last_name) == Str::lower($last_name)) {
 
-            Session::put('re', $re); // resave the session if we are going to continue
+            if ($re->user) {
+                return Redirect::intended('/');
+            }
+
+            if ($user = User::where('email', $re->email)->first()) {
+                RazorsEdgeManager::saveMembership($user, $re);
+                return $this->complete($user);
+            }
+
             $this->page['re']       = $re;
             $this->page['options']  = Usermeta::getOptions();
 
@@ -62,7 +77,8 @@ class VerifyMembership extends ComponentBase
             ];
 
         } else {
-            Flash::error('The first and last name did not match our records');
+            Session::put('re', $re);
+            Flash::error('The information did not match our records');
         }
 
         return [
@@ -73,25 +89,27 @@ class VerifyMembership extends ComponentBase
 
     public function onRegister()
     {
-        $vars = post();
-        $user = new User($vars);
-        $user->metadata = new Usermeta;
-        $user->metadata->first_name = $vars['metadata']['first_name'];
-        $user->metadata->last_name = $vars['metadata']['last_name'];
-        $user->is_activated = 1;
-        
-        $re = Session::pull('re');
+        $vars   = post();
+        $user   = AuthManager::register($vars);
 
-        if (RazorsEdgeManager::saveMembership($user, $re)) {
-            Auth::login($user);
-            return Redirect::intended('/');
-        } else {
+        return $this->complete($user);
+    }
 
-            Flash::error(Lang::get('dma.friends::lang.user.saveFailed'));
+    public function complete($user)
+    {
+        $isIOS  = get('isIOS');
 
+        Auth::login($user);
+
+        if ($isIOS) {
             return [
-                '#flashMessages' => $this->renderPartial('@flashMessages'),
+                '#layout-content' => $this->renderPartial('@iosComplete', [
+                    'email'     => $user->email,
+                    'password'  => $vars['password'],
+                ])
             ];
         }
+  
+        return Redirect::intended('/');
     }
 }

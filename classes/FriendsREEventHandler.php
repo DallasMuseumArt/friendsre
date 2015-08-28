@@ -46,9 +46,11 @@ class FriendsREEventHandler {
      */
     public function onAuthRegister($user)
     {  
-        //check if a razors edge record exists and merge if it isnt connected
-        $re = Razorsedge::where('email', $user->email)->first();
-        RazorsEdgeManager::saveMembership($user, $re);
+        if (!$user->razorsedge) {
+            //check if a razors edge record exists and merge if it isnt connected
+            $re = Razorsedge::where('email', $user->email)->first();
+            RazorsEdgeManager::saveMembership($user, $re);
+        }
     }
 
     public function onMembershipSaved($user)
