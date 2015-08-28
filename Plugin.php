@@ -148,7 +148,7 @@ class Plugin extends PluginBase
      */
     public function registerSchedule($schedule)
     {
-        $schedule->command('friends:sync-razorsedge')->everyFiveMinutes();
+        $schedule->command('friends:sync-razorsedge')->everyTenMinutes();
     }
 
     /**
