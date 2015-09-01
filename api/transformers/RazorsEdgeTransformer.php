@@ -90,10 +90,10 @@ class RazorsEdgeTransformer extends BaseTransformer {
     public function getData($instance)
     {
         $data = [
-                'id'                    => $instance->id, 
-                'user_id'               => $instance->user_id, 
+                'id'                    => (int)$instance->id, 
+                'user_id'               => (int)$instance->user_id, 
                 'razors_edge_id'        => $instance->razorsedge_id,
-                'member_id'             => $instance->member_id,
+                'member_id'             => (int)$instance->member_id,
                 'expires_on'            => $instance->expires_on,
                 'first_name'            => $instance->first_name,
                 'last_name'             => $instance->last_name,
@@ -101,7 +101,7 @@ class RazorsEdgeTransformer extends BaseTransformer {
                 'city'                  => $instance->city,
                 'state'                 => $instance->state,                
                 'zip'                   => $instance->zip,
-                'member_level'          => $instance->member_level,
+                'member_level'          => (int)$instance->member_level,
                 'email'                 => $instance->email,
                 
                 
