@@ -178,5 +178,18 @@ class Plugin extends PluginBase
             'DMA\FriendsRE\Activities\SavedMembership'   => 'SavedMembership',
         ];
     }
+    
+    /**
+     * Register Friends API resource endpoints
+     *
+     * @return array
+     */
+    public function registerFriendAPIResources()
+    {
+        //throw new \Exception('Cry baby...');
+        return [
+                'razors-edge'      => 'DMA\FriendsRE\API\Resources\RazorsEdgeResource',
+        ];
+    }
 
 }
