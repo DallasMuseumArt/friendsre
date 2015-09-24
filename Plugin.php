@@ -148,7 +148,7 @@ class Plugin extends PluginBase
      */
     public function registerSchedule($schedule)
     {
-        $schedule->command('friends:sync-razorsedge')->everyFiveMinutes();
+        $schedule->command('friends:sync-razorsedge')->everyTenMinutes();
     }
 
     /**
@@ -176,6 +176,19 @@ class Plugin extends PluginBase
     {
         return [
             'DMA\FriendsRE\Activities\SavedMembership'   => 'SavedMembership',
+        ];
+    }
+    
+    /**
+     * Register Friends API resource endpoints
+     *
+     * @return array
+     */
+    public function registerFriendAPIResources()
+    {
+        //throw new \Exception('Cry baby...');
+        return [
+                'razors-edge'      => 'DMA\FriendsRE\API\Resources\RazorsEdgeResource',
         ];
     }
 
