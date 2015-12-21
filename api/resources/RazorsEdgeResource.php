@@ -26,6 +26,9 @@ class RazorsEdgeResource extends BaseResource {
      *     tags={ "razors edge"},
      *
      *     @SWG\Parameter(
+     *         ref="#/parameters/authorization"
+     *     ),
+     *     @SWG\Parameter(
      *         ref="#/parameters/per_page"
      *     ),
      *     @SWG\Parameter(
@@ -64,6 +67,9 @@ class RazorsEdgeResource extends BaseResource {
      *     summary="Find a Razors Edge membership  by sync ID",
      *     tags={ "razors edge"},
      *
+     *     @SWG\Parameter(
+     *         ref="#/parameters/authorization"
+     *     ),
      *     @SWG\Parameter(
      *         description="ID of Razor Edge Sync ID to fetch",
      *         format="int64",
@@ -104,6 +110,9 @@ class RazorsEdgeResource extends BaseResource {
      *     summary="Find a Razors Edge membership  by friends user ID",
      *     tags={ "razors edge"},
      *
+     *     @SWG\Parameter(
+     *         ref="#/parameters/authorization"
+     *     ),
      *     @SWG\Parameter(
      *         description="ID of friends user  to fetch",
      *         format="int64",
