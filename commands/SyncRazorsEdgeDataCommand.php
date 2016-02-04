@@ -10,7 +10,7 @@ use Rainlab\User\Models\User;
 use DMA\Friends\Models\Usermeta;
 use DMA\FriendsRE\Models\RazorsEdge;
 use DMA\FriendsRE\Models\Settings;
-use DMA\FriendsRE\Classes\RazorsEdgeManager;
+use RazorsEdgeManager;
 
 class SyncRazorsEdgeDataCommand extends Command
 {

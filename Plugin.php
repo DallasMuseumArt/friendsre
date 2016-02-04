@@ -32,6 +32,9 @@ class Plugin extends PluginBase
     public function boot()
     {   
 
+        // Register ServiceProviders
+        \App::register('\DMA\FriendsRE\FriendsREServiceProvider');
+        
         // Register Event Subscribers
         $subscriber = new FriendsREEventHandler;
         Event::subscribe($subscriber);
@@ -190,6 +193,11 @@ class Plugin extends PluginBase
         return [
                 'razors-edge'      => 'DMA\FriendsRE\API\Resources\RazorsEdgeResource',
         ];
+    }
+    
+    public function registerFriendsMembershipInterface()
+    {
+       return 'DMA\FriendsRE\Classes\RazorsEdgeManager';
     }
 
 }

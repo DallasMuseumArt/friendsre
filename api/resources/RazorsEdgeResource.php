@@ -1,5 +1,4 @@
 <?php namespace DMA\FriendsRE\API\Resources;
-
 use Response;
 use DMA\Friends\Classes\API\BaseResource;
 use DMA\FriendsRE\Models\RazorsEdge;
@@ -7,7 +6,6 @@ use DMA\FriendsRE\Models\RazorsEdge;
 class RazorsEdgeResource extends BaseResource {
 
     protected $model        = '\DMA\FriendsRE\Models\RazorsEdge';
-
     protected $transformer  = '\DMA\FriendsRE\API\Transformers\RazorsEdgeTransformer';
 
     
@@ -150,5 +148,7 @@ class RazorsEdgeResource extends BaseResource {
         
         
     }
+
+    
     
 }

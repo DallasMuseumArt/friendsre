@@ -2,8 +2,8 @@
 
 use Session;
 use DB;
+use RazorsEdgeManager;
 use DMA\FriendsRE\Models\RazorsEdge;
-use DMA\FriendsRE\Classes\RazorsEdgeManager;
 use DMA\FriendsRE\Activities\SavedMembership;
 
 /**
@@ -28,15 +28,12 @@ class FriendsREEventHandler {
      */
     public function onAuthInvalidLogin($data, $rules)
     {
-
-        $re = Razorsedge::where('razorsedge_id', $data['login'])->first();
-
-        if ($re && !$re->user_id) {
-            Session::put(['authRedirect' => 'verify-membership']);
-            Session::put(['re' => $re]);
+        // Listening this event is not required any more
+        // but I am keeping for backwards compatibility
+        // Moved logic to RazorsEdgeManager
+        if($re = RazorsEdgeManager::retriveByCredentials($data)){
             return true;
-        }
-
+        }        
         return false;
     }
 
