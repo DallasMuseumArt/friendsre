@@ -31,6 +31,7 @@ class RazorsEdgeManager implements FriendsMembershipInterface {
      */
     public function saveMembership(User $user, $re)
     {
+
         if (!$re) return;
 
         if (isset($re->user_id) && $re->user_id === 0) {
@@ -42,7 +43,7 @@ class RazorsEdgeManager implements FriendsMembershipInterface {
             } else {
                 $user->metadata->current_member = Usermeta::NON_MEMBER;
             }
-
+            
             $user->push();
             $user->razorsedge()->save($re);
 
@@ -57,7 +58,7 @@ class RazorsEdgeManager implements FriendsMembershipInterface {
     
     public function retriveById($id) 
     {
-        
+        return Razorsedge::where('id', $id)->first();
     }
     
     public function retriveByCredentials(array $credentials) 
