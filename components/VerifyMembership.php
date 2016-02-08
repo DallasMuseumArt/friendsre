@@ -3,10 +3,10 @@
 use RainLab\User\Models\User;
 use DMA\Friends\Models\Usermeta;
 use DMA\Friends\Classes\UserExtend;
-use DMA\Friends\Classes\AuthManager;
 use DMA\FriendsRE\Models\RazorsEdge;
 use Cms\Classes\ComponentBase;
 use RazorsEdgeManager;
+use FriendsAuth;
 use Str;
 use Flash;
 use Lang;
@@ -90,7 +90,7 @@ class VerifyMembership extends ComponentBase
     public function onRegister()
     {
         $vars   = post();
-        $user   = AuthManager::register($vars);
+        $user   = FriendsAuth::register($vars);
 
         return $this->complete($user);
     }

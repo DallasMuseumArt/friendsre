@@ -195,7 +195,7 @@ class Plugin extends PluginBase
         ];
     }
     
-    public function registerFriendsMembershipInterface()
+    public function registerFriendsMembershipDriver()
     {
        return 'DMA\FriendsRE\Classes\RazorsEdgeManager';
     }
