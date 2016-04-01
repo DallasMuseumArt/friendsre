@@ -34,7 +34,7 @@ class RazorsEdgeManager implements FriendsMembershipInterface {
 
         if (!$re) return;
 
-        if (isset($re->user_id) && $re->user_id === 0) {
+        if (isset($re->user_id) && (int)$re->user_id === 0) {
             
             $user->metadata->current_member_number = $re->razorsedge_id;
             
