@@ -11,3 +11,6 @@
 1.0.5:
     - Add email field 
     - add_email_field.php
+1.1.0:
+    - Clean up and bug fixing
+    
