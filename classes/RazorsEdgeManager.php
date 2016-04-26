@@ -35,15 +35,29 @@ class RazorsEdgeManager implements FriendsMembershipInterface {
         if (!$re) return;
 
         if (isset($re->user_id) && (int)$re->user_id === 0) {
-            
-            $user->metadata->current_member_number = $re->razorsedge_id;
+
+            // In some instalation $user after is registered 
+            // the metadata relationship is empty on the model
+            // loaded in memory if that happens. Just reload
+            // the whole user model again
+            if (!$metadata = $user->metadata){
+                $user = $user->fresh();
+                $metadata = $user->metadata;
+            }
+
+            $current_member_number = $re->razorsedge_id;
+            $current_member = Usermeta::NON_MEMBER;
             
             if (strtotime($re->expires_on) >= time()) {
-                $user->metadata->current_member = Usermeta::IS_MEMBER;
-            } else {
-                $user->metadata->current_member = Usermeta::NON_MEMBER;
-            }
+                $current_member = Usermeta::IS_MEMBER;
+            }            
             
+            $metadata->fill([
+                    'current_member_number' => $current_member_number,
+                    'current_member'        => $current_member
+            ]);
+            
+
             $user->push();
             $user->razorsedge()->save($re);
 
